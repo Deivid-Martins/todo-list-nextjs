@@ -31,15 +31,38 @@ import { getTasks } from "@/actions/get-tasks-from-db";
 import { useEffect, useState } from "react";
 
 import { Tasks } from "@prisma/client";
+import { NewTask } from "@/actions/add.task";
 
 export default function Home() {
   const [taskList, setTaskList] = useState<Tasks[]>([]);
+  const [task, setTask] = useState<string>("");
 
   const handleGetTasks = async () => {
-    const tasks = await getTasks();
-    if (!tasks) return;
-    setTaskList(tasks);
+    try {
+      const tasks = await getTasks();
+      if (!tasks) return;
+      setTaskList(tasks);
+    } catch (error) {
+      throw error;
+    }
   };
+
+  const handleAddTask = async () => {
+    try {
+      if (task.length === 0 || !task) {
+        return;
+      }
+
+      const myNewTask = await NewTask(task);
+      if (!myNewTask) return;
+      setTaskList((prevTasks) => [...prevTasks, myNewTask]);
+      setTask("");
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleDeleteTask = async (id: string) => {};
 
   useEffect(() => {
     handleGetTasks();
@@ -49,8 +72,12 @@ export default function Home() {
     <main className="w-full h-screen bg-gray-100 flex justify-center items-center">
       <Card className="w-lg">
         <CardHeader className="flex gap-2">
-          <Input placeholder="Add new task" />
-          <Button className="cursor-pointer">
+          <Input
+            placeholder="Add new task"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+          <Button className="cursor-pointer" onClick={handleAddTask}>
             <Plus />
             Register
           </Button>
@@ -85,7 +112,11 @@ export default function Home() {
                 <div className="flex gap-2 items-center">
                   <EditTask />
 
-                  <Trash size={16} className="cursor-pointer" />
+                  <Trash
+                    size={16}
+                    className="cursor-pointer"
+                    onClick={() => handleDeleteTask(task.id)}
+                  />
                 </div>
               </div>
             ))}

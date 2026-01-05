@@ -3,9 +3,13 @@
 import { prisma } from "@/utils/prisma";
 
 export const getTasks = async () => {
-  const tasks = await prisma.tasks.findMany();
-  if (!tasks) return;
+  try {
+    const tasks = await prisma.tasks.findMany();
+    if (!tasks) return;
 
-  console.log("Tasks retrieved from DB:", tasks);
-  return tasks;
+    console.log(tasks);
+    return tasks;
+  } catch (error) {
+    throw error;
+  }
 };
