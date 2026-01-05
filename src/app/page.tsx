@@ -33,6 +33,7 @@ import { useEffect, useState } from "react";
 import { Tasks } from "@prisma/client";
 import { NewTask } from "@/actions/add-task";
 import { deleteTask } from "@/actions/delete-task";
+import { toast } from "sonner";
 
 export default function Home() {
   const [taskList, setTaskList] = useState<Tasks[]>([]);
@@ -58,6 +59,7 @@ export default function Home() {
       if (!myNewTask) return;
       setTaskList((prevTasks) => [...prevTasks, myNewTask]);
       setTask("");
+      toast.success("Task added successfully");
     } catch (error) {
       throw error;
     }
@@ -72,6 +74,8 @@ export default function Home() {
       setTaskList((prevTasks) =>
         prevTasks.filter((task) => task.id !== deletedTask.id)
       );
+
+      toast.warning("Task deleted successfully");
     } catch (error) {
       throw error;
     }
