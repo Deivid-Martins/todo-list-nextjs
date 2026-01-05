@@ -12,6 +12,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -59,7 +66,20 @@ export default function Home() {
               <div className="w-1 h-full bg-green-300"></div>
               <p className="flex-1 px-2 text-sm">Study React</p>
               <div className="flex gap-2 items-center">
-                <SquarePen size={16} className="cursor-pointer" />
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <SquarePen size={16} className="cursor-pointer" />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Edit Task</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex gap-2">
+                      <Input placeholder="Edit task" />
+                      <Button className="cursor-pointer">Save</Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
                 <Trash size={16} className="cursor-pointer" />
               </div>
             </div>
@@ -70,10 +90,33 @@ export default function Home() {
               <ListCheck size={18} />
               <p className="text-xs">Completed tasks (3/3)</p>
             </div>
-            <Button className="text-xs h-7 cursor-pointer" variant="outline">
-              <Trash />
-              Clear completed tasks
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  className="text-xs h-7 cursor-pointer"
+                  variant="outline"
+                >
+                  <Trash />
+                  Clear completed tasks
+                </Button>
+              </AlertDialogTrigger>
+
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to delete these x tasks?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction>Confirm</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
 
           <div className="h-2 w-full bg-gray-100 mt-4 rounded-md">
@@ -87,28 +130,6 @@ export default function Home() {
             <Sigma size={18} />
             <p className="text-xs">3 tasks in total</p>
           </div>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button>Open</Button>
-            </AlertDialogTrigger>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Are you sure you want to delete these x tasks?
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Confirm</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
         </CardContent>
       </Card>
     </main>
