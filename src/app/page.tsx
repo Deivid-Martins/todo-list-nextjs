@@ -121,10 +121,12 @@ export default function Home() {
             {taskList.map((task) => (
               <div
                 key={task.id}
-                className=" h-14 flex justify-between items-center border-t"
+                className=" h-14 flex justify-between items-center border-t hover:bg-gray-100 duration-300"
               >
-                <div className="w-1 h-full bg-green-300"></div>
-                <p className="flex-1 px-2 text-sm">{task.task}</p>
+                <div className="w-1 h-full bg-red-400"></div>
+                <p className="flex-1 px-2 text-sm cursor-pointer hover:text-gray-700">
+                  {task.task}
+                </p>
                 <div className="flex gap-2 items-center">
                   <EditTask />
 
