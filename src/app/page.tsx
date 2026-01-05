@@ -1,30 +1,39 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
+import { Check, List, Plus, TriangleAlert } from "lucide-react";
 
 export default function Home() {
   return (
     <main className="w-full h-screen bg-gray-100 flex justify-center items-center">
-      <Card className="w-lg p-4">
-        <div className="flex gap-2">
+      <Card className="w-lg">
+        <CardHeader className="flex gap-2">
           <Input placeholder="Add new task" />
-          <Button className="cursor-pointer" variant="outline">
+          <Button className="cursor-pointer">
             <Plus />
             Register
           </Button>
-        </div>
+        </CardHeader>
 
-        <Separator />
+        <CardContent>
+          <Separator className="mb-4" />
+          <div className="flex gap-2">
+            <Badge className="cursor-pointer">
+              <List />
+              All
+            </Badge>
+            <Badge className="cursor-pointer">
+              <TriangleAlert />
+              Incomplete
+            </Badge>
+            <Badge className="cursor-pointer">
+              <Check />
+              Completed
+            </Badge>
+          </div>
+        </CardContent>
       </Card>
     </main>
   );
