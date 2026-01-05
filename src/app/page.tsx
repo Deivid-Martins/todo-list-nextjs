@@ -1,3 +1,14 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -6,7 +17,9 @@ import { Separator } from "@/components/ui/separator";
 import {
   Check,
   List,
+  ListCheck,
   Plus,
+  Sigma,
   SquarePen,
   Trash,
   TriangleAlert,
@@ -51,6 +64,51 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          <div className="flex justify-between mt-4">
+            <div className="flex gap-2 items-center">
+              <ListCheck size={18} />
+              <p className="text-xs">Completed tasks (3/3)</p>
+            </div>
+            <Button className="text-xs h-7 cursor-pointer" variant="outline">
+              <Trash />
+              Clear completed tasks
+            </Button>
+          </div>
+
+          <div className="h-2 w-full bg-gray-100 mt-4 rounded-md">
+            <div
+              className="h-full bg-blue-500 rounded-md"
+              style={{ width: "50%" }}
+            ></div>
+          </div>
+
+          <div className="flex justify-end items-center mt-2 gap-2">
+            <Sigma size={18} />
+            <p className="text-xs">3 tasks in total</p>
+          </div>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button>Open</Button>
+            </AlertDialogTrigger>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Are you sure you want to delete these x tasks?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction>Confirm</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </CardContent>
       </Card>
     </main>
