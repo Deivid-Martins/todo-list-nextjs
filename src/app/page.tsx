@@ -31,7 +31,8 @@ import { getTasks } from "@/actions/get-tasks-from-db";
 import { useEffect, useState } from "react";
 
 import { Tasks } from "@prisma/client";
-import { NewTask } from "@/actions/add.task";
+import { NewTask } from "@/actions/add-task";
+import { deleteTask } from "@/actions/delete-task";
 
 export default function Home() {
   const [taskList, setTaskList] = useState<Tasks[]>([]);
@@ -62,7 +63,19 @@ export default function Home() {
     }
   };
 
-  const handleDeleteTask = async (id: string) => {};
+  const handleDeleteTask = async (id: string) => {
+    try {
+      if (!id) return;
+      const deletedTask = await deleteTask(id);
+
+      if (!deletedTask) return;
+      setTaskList((prevTasks) =>
+        prevTasks.filter((task) => task.id !== deletedTask.id)
+      );
+    } catch (error) {
+      throw error;
+    }
+  };
 
   useEffect(() => {
     handleGetTasks();
@@ -82,7 +95,6 @@ export default function Home() {
             Register
           </Button>
         </CardHeader>
-        <Button onClick={handleGetTasks}>Search Tasks</Button>
 
         <CardContent>
           <Separator className="mb-4" />
