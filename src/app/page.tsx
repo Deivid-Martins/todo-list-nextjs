@@ -1,3 +1,5 @@
+"use client";
+
 import { EditTask } from "@/components/edit-task";
 import {
   AlertDialog,
@@ -25,7 +27,24 @@ import {
   TriangleAlert,
 } from "lucide-react";
 
+import { getTasks } from "@/actions/get-tasks-from-db";
+import { useEffect, useState } from "react";
+
+import { Tasks } from "@prisma/client";
+
 export default function Home() {
+  const [taskList, setTaskList] = useState<Tasks[]>([]);
+
+  const handleGetTasks = async () => {
+    const tasks = await getTasks();
+    if (!tasks) return;
+    setTaskList(tasks);
+  };
+
+  useEffect(() => {
+    handleGetTasks();
+  }, []);
+
   return (
     <main className="w-full h-screen bg-gray-100 flex justify-center items-center">
       <Card className="w-lg">
@@ -36,6 +55,7 @@ export default function Home() {
             Register
           </Button>
         </CardHeader>
+        <Button onClick={handleGetTasks}>Search Tasks</Button>
 
         <CardContent>
           <Separator className="mb-4" />
@@ -55,15 +75,20 @@ export default function Home() {
           </div>
 
           <div className="mt-4 border-b">
-            <div className=" h-14 flex justify-between items-center border-t">
-              <div className="w-1 h-full bg-green-300"></div>
-              <p className="flex-1 px-2 text-sm">Study React</p>
-              <div className="flex gap-2 items-center">
-                <EditTask />
+            {taskList.map((task) => (
+              <div
+                key={task.id}
+                className=" h-14 flex justify-between items-center border-t"
+              >
+                <div className="w-1 h-full bg-green-300"></div>
+                <p className="flex-1 px-2 text-sm">{task.task}</p>
+                <div className="flex gap-2 items-center">
+                  <EditTask />
 
-                <Trash size={16} className="cursor-pointer" />
+                  <Trash size={16} className="cursor-pointer" />
+                </div>
               </div>
-            </div>
+            ))}
           </div>
 
           <div className="flex justify-between mt-4">
