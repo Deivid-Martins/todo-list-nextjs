@@ -39,6 +39,7 @@ import { updateTaskStatus } from "@/actions/toggle-done";
 export default function Home() {
   const [taskList, setTaskList] = useState<Tasks[]>([]);
   const [task, setTask] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleGetTasks = async () => {
     try {
@@ -51,8 +52,10 @@ export default function Home() {
   };
 
   const handleAddTask = async () => {
+    setLoading(true);
     try {
       if (task.length === 0 || !task) {
+        toast.error("Please enter a task.");
         return;
       }
 
@@ -63,6 +66,8 @@ export default function Home() {
       toast.success("Task added successfully");
     } catch (error) {
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,7 +125,7 @@ export default function Home() {
             onChange={(e) => setTask(e.target.value)}
           />
           <Button className="cursor-pointer" onClick={handleAddTask}>
-            <Plus />
+            {loading ? <Plus className="animate-spin" /> : <Plus />}
             Register
           </Button>
         </CardHeader>
@@ -160,7 +165,7 @@ export default function Home() {
                   {task.task}
                 </p>
                 <div className="flex gap-2 items-center">
-                  <EditTask />
+                  <EditTask task={task} handleGetTasks={handleGetTasks} />
 
                   <Trash
                     size={16}
