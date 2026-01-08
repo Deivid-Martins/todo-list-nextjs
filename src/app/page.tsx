@@ -26,15 +26,15 @@ import { NewTask } from "@/actions/add-task";
 import { deleteTask } from "@/actions/delete-task";
 import { toast } from "sonner";
 import { updateTaskStatus } from "@/actions/toggle-done";
-import Filter from "@/components/filter";
-
-type filterType = "all" | "incomplete" | "completed";
+import { Filter, FilterType } from "@/components/filter";
+import { deleteAllTasks } from "@/actions/delete-all-tasks";
 
 export default function Home() {
   const [taskList, setTaskList] = useState<Tasks[]>([]);
   const [task, setTask] = useState("");
   const [loading, setLoading] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState<filterType>("all");
+  const [currentFilter, setCurrentFilter] = useState<FilterType>("all");
+  const [filteredTasks, setFilteredTasks] = useState<Tasks[]>([]);
 
   const handleGetTasks = async () => {
     try {
@@ -76,7 +76,7 @@ export default function Home() {
         prevTasks.filter((task) => task.id !== deletedTask.id)
       );
 
-      toast.warning("Task deleted successfully");
+      toast.success("Task deleted successfully");
     } catch (error) {
       throw error;
     }
@@ -106,9 +106,36 @@ export default function Home() {
     }
   };
 
+  const handleDeleteAllTasks = async () => {
+    try {
+      deleteAllTasks();
+      setTaskList([]);
+      toast.success("All tasks deleted successfully");
+    } catch (error) {
+      throw error;
+    }
+  };
+
   useEffect(() => {
     handleGetTasks();
   }, []);
+
+  useEffect(() => {
+    switch (currentFilter) {
+      case "all":
+        setFilteredTasks(taskList);
+        break;
+      case "completed":
+        setFilteredTasks(taskList.filter((task) => task.done));
+        break;
+      case "incomplete":
+        setFilteredTasks(taskList.filter((task) => !task.done));
+        break;
+      default:
+        setFilteredTasks(taskList);
+        break;
+    }
+  }, [currentFilter, taskList]);
 
   return (
     <main className="w-full h-screen bg-gray-100 flex justify-center items-center">
@@ -132,7 +159,7 @@ export default function Home() {
             setCurrentFilter={setCurrentFilter}
           />
           <div className="mt-4 border-b">
-            {taskList.map((task) => (
+            {filteredTasks.map((task) => (
               <div
                 key={task.id}
                 className=" h-14 flex justify-between items-center border-t hover:bg-gray-100 duration-300"
@@ -164,7 +191,10 @@ export default function Home() {
           <div className="flex justify-between mt-4">
             <div className="flex gap-2 items-center">
               <ListCheck size={18} />
-              <p className="text-xs">Completed tasks (3/3)</p>
+              <p className="text-xs">
+                Completed tasks ({taskList.filter((task) => task.done).length}/
+                {taskList.length})
+              </p>
             </div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
@@ -189,7 +219,9 @@ export default function Home() {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction>Confirm</AlertDialogAction>
+                  <AlertDialogAction onClick={handleDeleteAllTasks}>
+                    Confirm
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
@@ -204,7 +236,7 @@ export default function Home() {
 
           <div className="flex justify-end items-center mt-2 gap-2">
             <Sigma size={18} />
-            <p className="text-xs">3 tasks in total</p>
+            <p className="text-xs">{taskList.length} tasks in total</p>
           </div>
         </CardContent>
       </Card>

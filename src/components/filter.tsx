@@ -1,17 +1,14 @@
 import { Check, List, TriangleAlert } from "lucide-react";
 import { Badge } from "./ui/badge";
 
+export type FilterType = "all" | "incomplete" | "completed";
+
 type FilterProps = {
-  currentFilter: "all" | "incomplete" | "completed";
-  setCurrentFilter: React.Dispatch<
-    React.SetStateAction<"all" | "incomplete" | "completed">
-  >;
+  currentFilter: FilterType;
+  setCurrentFilter: React.Dispatch<React.SetStateAction<FilterType>>;
 };
 
-export default function Filter({
-  currentFilter,
-  setCurrentFilter,
-}: FilterProps) {
+export function Filter({ currentFilter, setCurrentFilter }: FilterProps) {
   return (
     <div className="flex gap-2">
       <Badge
