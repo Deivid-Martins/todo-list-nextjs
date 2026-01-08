@@ -210,7 +210,8 @@ export default function Home() {
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    Are you sure you want to delete these x tasks?
+                    Are you sure you want to delete these {taskList.length}{" "}
+                    tasks?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     This action cannot be undone. This will permanently delete
