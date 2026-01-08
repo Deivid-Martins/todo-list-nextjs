@@ -12,20 +12,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import {
-  Check,
-  List,
-  ListCheck,
-  Plus,
-  Sigma,
-  Trash,
-  TriangleAlert,
-} from "lucide-react";
+import { ListCheck, Plus, Sigma, Trash } from "lucide-react";
 
 import { getTasks } from "@/actions/get-tasks-from-db";
 import { useEffect, useState } from "react";
@@ -35,11 +26,15 @@ import { NewTask } from "@/actions/add-task";
 import { deleteTask } from "@/actions/delete-task";
 import { toast } from "sonner";
 import { updateTaskStatus } from "@/actions/toggle-done";
+import Filter from "@/components/filter";
+
+type filterType = "all" | "incomplete" | "completed";
 
 export default function Home() {
   const [taskList, setTaskList] = useState<Tasks[]>([]);
-  const [task, setTask] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [task, setTask] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState<filterType>("all");
 
   const handleGetTasks = async () => {
     try {
@@ -132,21 +127,10 @@ export default function Home() {
 
         <CardContent>
           <Separator className="mb-4" />
-          <div className="flex gap-2">
-            <Badge className="cursor-pointer" variant="default">
-              <List />
-              All
-            </Badge>
-            <Badge className="cursor-pointer" variant="outline">
-              <TriangleAlert />
-              Incomplete
-            </Badge>
-            <Badge className="cursor-pointer" variant="outline">
-              <Check />
-              Completed
-            </Badge>
-          </div>
-
+          <Filter
+            currentFilter={currentFilter}
+            setCurrentFilter={setCurrentFilter}
+          />
           <div className="mt-4 border-b">
             {taskList.map((task) => (
               <div
